@@ -1,19 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from './entities/category.entity';
+import { Repository } from 'typeorm';
+import { throws } from 'assert';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+
+  constructor(@InjectRepository(Category)
+  private readonly categoryRepository: Repository<Category>) { }
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const category = this.categoryRepository.create(createCategoryDto)
+    try {
+      await this.categoryRepository.save(category)
+      return category
+    } catch (error) {
+      this.handleDBExceptions(error)
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    const categories = await this.categoryRepository.find()
+    return categories
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    const category = await this.categoryRepository.findOneBy({ id })
+    if (!category) throw new NotFoundException("La categoria no existe")
+    return category
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -22,5 +39,12 @@ export class CategoriesService {
 
   remove(id: number) {
     return `This action removes a #${id} category`;
+  }
+
+
+  private handleDBExceptions(error: any) {
+    if (error.code === "23505") {
+      throw new BadRequestException("La categoria ya existe")
+    }
   }
 }
