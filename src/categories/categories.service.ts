@@ -32,12 +32,29 @@ export class CategoriesService {
     return category
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const category = await this.findOne(id)
+    try {
+      category.name = updateCategoryDto.name
+      return await this.categoryRepository.save(category)
+    } catch (error) {
+      this.handleDBExceptions(error)
+
+    }
+
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const category = await this.findOne(id)
+    try {
+      await this.categoryRepository.remove(category)
+      return { message: "La categoria ha sido eliminada Satisfactoriamente" }
+    } catch (error) {
+      throw new BadRequestException("Error al eliminar la categoria")
+
+    }
+
   }
 
 
