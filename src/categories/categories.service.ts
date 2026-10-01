@@ -36,7 +36,8 @@ export class CategoriesService {
     const category = await this.findOne(id)
     try {
       category.name = updateCategoryDto.name
-      return await this.categoryRepository.save(category)
+      await this.categoryRepository.save(category)
+      return { message: "La categoria fue actualiazada satisfactoriamente" }
     } catch (error) {
       this.handleDBExceptions(error)
 
