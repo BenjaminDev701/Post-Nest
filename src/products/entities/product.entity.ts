@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "../../categories/entities/category.entity";
 
 @Entity()
 export class Product {
@@ -18,6 +19,11 @@ export class Product {
 
     @Column({ type: "int", default: 0 })
     inventory: number
+
+    @ManyToOne(() => Category)
+    //*esto es para que en en el prodcuto salga { category:{id, name}}
+    //todo: esto hace la relacion con la entity category 
+    category: Category
 }
 
 
