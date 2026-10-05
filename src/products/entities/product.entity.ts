@@ -20,6 +20,7 @@ export class Product {
     @Column({ type: "int", default: 0 })
     inventory: number
 
+    //*eager: sirve para que las relaciones se carguen automaticamente { eager: true }
     @ManyToOne(() => Category)
     //*esto es para que en en el prodcuto salga { category:{id, name}}
     //todo: esto hace la relacion con la entity category 
