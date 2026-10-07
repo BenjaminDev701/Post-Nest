@@ -25,6 +25,9 @@ export class Product {
     //*esto es para que en en el prodcuto salga { category:{id, name}}
     //todo: esto hace la relacion con la entity category 
     category: Category
+
 }
+
+
 
 

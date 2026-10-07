@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
 import { typeOrmConfig } from './config/typeorm.config';
 import { ProductsModule } from './products/products.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
 
@@ -18,11 +19,11 @@ import { ProductsModule } from './products/products.module';
     TypeOrmModule.forRootAsync({
       //*usefactory nos da acceso a las variables de entorno
       useFactory: (configService: ConfigService) => typeOrmConfig(configService),
-      inject: [ConfigService]
-
+      inject: [ConfigService],
     }),
     CategoriesModule,
-    ProductsModule],
+    ProductsModule,
+    TransactionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
